@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
   autoconf \
   bison \
   curl \
+  wget \
   git \
   nano \
   vim \
@@ -43,7 +44,7 @@ RUN rbenv install 2.2.3
 
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
 
-# Ruby 2.0.0-p647
+# Ruby 2.0.0
 RUN rbenv global 2.0.0-p647
 RUN gem install bundler nokogiri
 
