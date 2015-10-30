@@ -36,19 +36,20 @@ RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh # or /etc/profile
 RUN echo 'eval "$(rbenv init -)"' >> .bashrc
 
 ENV CONFIGURE_OPTS --disable-install-doc
+# Add More Ruby Versions Here
+# And install slow or universally required gems (nokogiri is slow, bundler is universal)
 RUN rbenv install 2.0.0-p647
 RUN rbenv install 2.2.3
 
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
 
+# Ruby 2.0.0-p647
 RUN rbenv global 2.0.0-p647
 RUN gem install bundler nokogiri
 
+# Ruby 2.2.3
 RUN rbenv global 2.2.3
 RUN gem install bundler nokogiri
-
-RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
-RUN apt-get install -y nodejs
 
 RUN set -ex \
   && for key in \
@@ -72,5 +73,6 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
   && tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 \
   && rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc
 
+RUN npm install -g npm
 
 CMD ['bash']
