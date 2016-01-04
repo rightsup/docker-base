@@ -7,6 +7,7 @@ RUN apk-install \
   ruby-io-console \
   ruby-bigdecimal \
   ruby-rake \
+  ruby-irb \
   ## utils
   bash \
   curl \
