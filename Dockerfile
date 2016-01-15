@@ -45,18 +45,23 @@ RUN echo 'eval "$(rbenv init -)"' >> .bashrc
 ENV CONFIGURE_OPTS --disable-install-doc
 # Add More Ruby Versions Here
 # And install slow or universally required gems (nokogiri is slow, bundler is universal)
-RUN rbenv install 2.0.0-p647
 RUN rbenv install 2.2.3
+RUN rbenv install 2.3.0
 
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
 
-# Ruby 2.0.0
-RUN rbenv global 2.0.0-p647
-RUN gem install bundler nokogiri
-
 # Ruby 2.2.3
 RUN rbenv global 2.2.3
-RUN gem install bundler nokogiri
+RUN gem update --system && \
+    gem install bundler && \
+    bundle config build.nokogiri --use-system-libraries
+
+    # Ruby 2.3.0
+RUN rbenv global 2.3.0
+RUN gem update --system && \
+    gem install bundler && \
+    bundle config build.nokogiri --use-system-libraries
+    
 
 RUN set -ex \
   && for key in \
