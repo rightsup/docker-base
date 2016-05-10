@@ -2,10 +2,10 @@ FROM ubuntu:14.04
 MAINTAINER RightsUp <it@rightsup.com>
 
 # Set Locales to prevent encoding mismatch errors in child containers.
-RUN locale-gen en_US.UTF-8  
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8 
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update && apt-get install -y \
   autoconf \
@@ -46,7 +46,7 @@ ENV CONFIGURE_OPTS --disable-install-doc
 # Add More Ruby Versions Here
 # And install slow or universally required gems (nokogiri is slow, bundler is universal)
 RUN rbenv install 2.2.3
-RUN rbenv install 2.3.0
+RUN rbenv install 2.3.1
 
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
 
@@ -57,11 +57,11 @@ RUN gem update --system && \
     bundle config build.nokogiri --use-system-libraries
 
     # Ruby 2.3.0
-RUN rbenv global 2.3.0
+RUN rbenv global 2.3.1
 RUN gem update --system && \
     gem install bundler && \
     bundle config build.nokogiri --use-system-libraries
-    
+
 
 RUN set -ex \
   && for key in \
