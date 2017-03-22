@@ -18,7 +18,6 @@ RUN apt-get update && apt-get install -y \
   tmux \
   g++ \
   postgresql-client \
-  phantomjs \
   build-essential \
   libssl-dev \
   libyaml-dev \
@@ -33,7 +32,14 @@ RUN apt-get update && apt-get install -y \
   libxml2-dev \
   libxslt1-dev \
   libcurl4-openssl-dev \
-  libffi-dev
+  libffi-dev \
+  libevent-dev 
+
+# Install Libcouchbase
+RUN git clone git://github.com/couchbase/libcouchbase.git && \
+  cd libcouchbase && mkdir build && cd build && \
+  ../cmake/configure && \
+  make && make install
 
 # Install rbenv
 RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv
