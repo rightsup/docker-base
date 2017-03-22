@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM aarch64/ubuntu:14.04
 MAINTAINER RightsUp <it@rightsup.com>
 
 # Set Locales to prevent encoding mismatch errors in child containers.
