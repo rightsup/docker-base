@@ -9,3 +9,7 @@ Libcouchbase has been packaged for Alpine [here](https://github.com/gerbal/alpin
 The image also includes ruby and a few commonly used utilities.
 
 To use it, replace `FROM ubuntu:14.04` with `FROM rightsup/base`
+
+### UPDATE by Kenan Memis on 08.10.2021 
+
+The new dockerfile, `Dockerfile-ubuntu-20-04` will be used as new base image for some applications like mini-beast
