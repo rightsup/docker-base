@@ -1,33 +1,37 @@
-FROM gliderlabs/alpine:latest
-MAINTAINER RightsUp <it@rightsup.com>
+FROM ubuntu:22.04
+LABEL RightsUp <it@rightsup.com>
+ENV TZ=Europe/Berlin
 
-RUN apk-install \
-  ## ruby
-  ruby \
-  ruby-io-console \
-  ruby-bigdecimal \
-  ruby-rake \
-  ruby-irb \
-  ## utils
-  bash \
-  curl \
-  git \
-  wget \
-  # postgres
-  libpq
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+RUN apt update && apt install -y bash curl git wget rubygems locales \
+    postgresql-client build-essential libssl-dev libyaml-dev libreadline-dev libpq-dev \
+    libsqlite3-dev libxml2-dev libxslt1-dev libcurl4-openssl-dev libffi-dev zlib1g-dev
 
-# TODO: Replace with apk-install pending acceptance of http://lists.alpinelinux.org/alpine-aports/0128.html
-RUN curl -Ls https://github.com/gerbal/alpine-libcouchbase/releases/download/2.5.4/libcouchbase-2.5.4-r0.apk > /tmp/libcouchbase.apk && \
-    curl -Ls https://github.com/gerbal/alpine-libcouchbase/releases/download/2.5.4/libcouchbase-dev-2.5.4-r0.apk > /tmp/libcouchbase-dev.apk && \
-    apk-install --allow-untrusted /tmp/libcouchbase.apk /tmp/libcouchbase-dev.apk&& \
-    rm /tmp/libcouchbase-dev.apk /tmp/libcouchbase.apk
+RUN locale-gen  en_US.UTF-8
 
-# Ruby Config
-ENV CONFIGURE_OPTS --disable-install-doc
-RUN echo 'gem: --no-rdoc --no-ri' >> /etc/gemrc
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
+RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv
+RUN git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build
+RUN git clone https://github.com/sstephenson/rbenv-gem-rehash.git /root/.rbenv/plugins/rbenv-gem-rehash
+
+ENV PATH=/root/.rbenv/shims:/root/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh # or /etc/profile
+RUN echo 'eval "$(rbenv init -)"' >> .bashrc
+
+ENV RUBY_VERSION=3.3.4
+ENV CONFIGURE_OPTS=--disable-install-doc
+
+RUN rbenv install $RUBY_VERSION
+RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
+RUN rbenv global $RUBY_VERSION
 RUN gem update --system
 RUN gem install bundler
+RUN bundle config build.nokogiri --use-system-libraries
 RUN gem sources -c
 
-CMD bash
+CMD ["/bin/sh", "-c", "['bash']"]

@@ -1,10 +1,11 @@
-FROM ubuntu:22.04
+#latest was 20.04 then
+FROM ubuntu:latest
 LABEL RightsUp <it@rightsup.com>
 ENV TZ=Europe/Berlin
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt update && apt install -y bash curl git wget rubygems locales \
+RUN apt update && apt install -y bash curl git wget rubygems locales \ 
     postgresql-client build-essential libssl-dev libyaml-dev libreadline-dev libpq-dev \
     libsqlite3-dev libxml2-dev libxslt1-dev libcurl4-openssl-dev libffi-dev zlib1g-dev
 
@@ -23,7 +24,7 @@ ENV PATH=/root/.rbenv/shims:/root/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr
 RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh # or /etc/profile
 RUN echo 'eval "$(rbenv init -)"' >> .bashrc
 
-ENV RUBY_VERSION=3.3.4
+ENV RUBY_VERSION=2.6.3
 ENV CONFIGURE_OPTS=--disable-install-doc
 
 RUN rbenv install $RUBY_VERSION
